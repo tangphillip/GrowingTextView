@@ -45,7 +45,9 @@
 @synthesize editable;
 @synthesize dataDetectorTypes; 
 @synthesize animateHeightChange;
+@synthesize animationDuration;
 @synthesize returnKeyType;
+
 
 // having initwithcoder allows us to use HPGrowingTextView in a Nib. -- aob, 9/2011
 - (id)initWithCoder:(NSCoder *)aDecoder
@@ -69,20 +71,23 @@
     CGRect r = self.frame;
     r.origin.y = 0;
     r.origin.x = 0;
+    
+    autoComputeMinAndMax = NO;
+    minHeight = maxHeight = self.frame.size.height;
+    
     internalTextView = [[HPTextViewInternal alloc] initWithFrame:r];
     internalTextView.delegate = self;
     internalTextView.scrollEnabled = NO;
-    internalTextView.font = [UIFont fontWithName:@"Helvetica" size:13]; 
+    internalTextView.font = [UIFont fontWithName:@"Helvetica" size:13];
     internalTextView.contentInset = UIEdgeInsetsZero;		
     internalTextView.showsHorizontalScrollIndicator = NO;
     internalTextView.text = @"-";
     [self addSubview:internalTextView];
     
-    UIView *internal = (UIView*)[[internalTextView subviews] objectAtIndex:0];
-    minHeight = internal.frame.size.height;
     minNumberOfLines = 1;
     
     animateHeightChange = YES;
+    animationDuration = 0.1f;
     
     internalTextView.text = @"";
     
@@ -106,6 +111,7 @@
 -(void)setFrame:(CGRect)aframe
 {
 	CGRect r = aframe;
+
 	r.origin.y = 0;
 	r.origin.x = contentInset.left;
     r.size.width -= contentInset.left + contentInset.right;
@@ -138,25 +144,39 @@
 -(void)setMaxNumberOfLines:(int)n
 {
     // Use internalTextView for height calculations, thanks to Gwynne <http://blog.darkrainfall.org/>
-    NSString *saveText = internalTextView.text, *newText = @"-";
-    
-    internalTextView.delegate = nil;
-    internalTextView.hidden = YES;
-    
-    for (int i = 1; i < n; ++i)
-        newText = [newText stringByAppendingString:@"\n|W|"];
-    
-    internalTextView.text = newText;
-    
-    maxHeight = internalTextView.contentSize.height;
-    
-    internalTextView.text = saveText;
-    internalTextView.hidden = NO;
-    internalTextView.delegate = self;
-    
-    [self sizeToFit];
+    if (autoComputeMinAndMax) {
+        NSString *saveText = internalTextView.text, *newText = @"-";
+        
+        internalTextView.delegate = nil;
+        internalTextView.hidden = YES;
+        
+        for (int i = 1; i < n; ++i)
+            newText = [newText stringByAppendingString:@"\n|W|"];
+        
+        internalTextView.text = newText;
+        
+        maxHeight = internalTextView.contentSize.height;
+        
+        internalTextView.text = saveText;
+        internalTextView.hidden = NO;
+        internalTextView.delegate = self;
+        
+        [self sizeToFit];
+    }
     
     maxNumberOfLines = n;
+}
+
+- (void)setAutoComputeMinAndMax:(BOOL)aAutoComputeMinAndMax {
+    autoComputeMinAndMax = aAutoComputeMinAndMax;
+    if (autoComputeMinAndMax) {
+        [self setMinNumberOfLines:minNumberOfLines];
+        [self setMaxNumberOfLines:maxNumberOfLines];
+    }
+}
+
+- (BOOL) autoComputeMinAndMax {
+    return autoComputeMinAndMax;
 }
 
 -(int)maxNumberOfLines
@@ -166,24 +186,26 @@
 
 -(void)setMinNumberOfLines:(int)m
 {
-	// Use internalTextView for height calculations, thanks to Gwynne <http://blog.darkrainfall.org/>
-    NSString *saveText = internalTextView.text, *newText = @"-";
-    
-    internalTextView.delegate = nil;
-    internalTextView.hidden = YES;
-    
-    for (int i = 1; i < m; ++i)
-        newText = [newText stringByAppendingString:@"\n|W|"];
-    
-    internalTextView.text = newText;
-    
-    minHeight = internalTextView.contentSize.height;
-    
-    internalTextView.text = saveText;
-    internalTextView.hidden = NO;
-    internalTextView.delegate = self;
-    
-    [self sizeToFit];
+    if (autoComputeMinAndMax) {
+        // Use internalTextView for height calculations, thanks to Gwynne <http://blog.darkrainfall.org/>
+        NSString *saveText = internalTextView.text, *newText = @"-";
+        
+        internalTextView.delegate = nil;
+        internalTextView.hidden = YES;
+        
+        for (int i = 1; i < m; ++i)
+            newText = [newText stringByAppendingString:@"\n|W|"];
+        
+        internalTextView.text = newText;
+        
+        minHeight = internalTextView.contentSize.height;
+        
+        internalTextView.text = saveText;
+        internalTextView.hidden = NO;
+        internalTextView.delegate = self;
+        
+        [self sizeToFit];
+    }
     
     minNumberOfLines = m;
 }
@@ -217,7 +239,7 @@
                 
                 if ([UIView resolveClassMethod:@selector(animateWithDuration:animations:)]) {
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
-                    [UIView animateWithDuration:0.1f 
+                    [UIView animateWithDuration:self.animationDuration
                                           delay:0 
                                         options:(UIViewAnimationOptionAllowUserInteraction|
                                                  UIViewAnimationOptionBeginFromCurrentState)                                 
@@ -232,7 +254,7 @@
 #endif
                 } else {
                     [UIView beginAnimations:@"" context:nil];
-                    [UIView setAnimationDuration:0.1f];
+                    [UIView setAnimationDuration:self.animationDuration];
                     [UIView setAnimationDelegate:self];
                     [UIView setAnimationDidStopSelector:@selector(growDidStop)];
                     [UIView setAnimationBeginsFromCurrentState:YES];

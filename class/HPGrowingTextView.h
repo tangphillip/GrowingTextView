@@ -54,13 +54,15 @@
 	
 	int minHeight;
 	int maxHeight;
+    BOOL autoComputeMinAndMax;
 	
 	//class properties
 	int maxNumberOfLines;
 	int minNumberOfLines;
 	
 	BOOL animateHeightChange;
-	
+	CGFloat animationDuration;
+    
 	//uitextview properties
 	NSObject <HPGrowingTextViewDelegate> *delegate;
 	NSString *text;
@@ -76,14 +78,18 @@
 }
 
 //real class properties
+@property int minHeight;
+@property int maxHeight;
 @property int maxNumberOfLines;
 @property int minNumberOfLines;
+@property BOOL autoComputeMinAndMax;
 @property BOOL animateHeightChange;
-@property (retain) UITextView *internalTextView;	
+@property CGFloat animationDuration;
+@property (retain) UITextView *internalTextView;
 
 
 //uitextview properties
-@property(assign) NSObject<HPGrowingTextViewDelegate> *delegate;
+@property(assign) IBOutlet NSObject<HPGrowingTextViewDelegate> *delegate;
 @property(nonatomic,assign) NSString *text;
 @property(nonatomic,assign) UIFont *font;
 @property(nonatomic,assign) UIColor *textColor;
