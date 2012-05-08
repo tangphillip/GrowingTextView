@@ -54,42 +54,31 @@
 	
 	int minHeight;
 	int maxHeight;
-    BOOL autoComputeMinAndMax;
 	
 	//class properties
 	int maxNumberOfLines;
 	int minNumberOfLines;
 	
 	BOOL animateHeightChange;
-	CGFloat animationDuration;
-    
+	
 	//uitextview properties
 	NSObject <HPGrowingTextViewDelegate> *delegate;
-	NSString *text;
-	UIFont *font;
-	UIColor *textColor;
-	UITextAlignment textAlignment; 
-	NSRange selectedRange;
-	BOOL editable;
-	UIDataDetectorTypes dataDetectorTypes;
-	UIReturnKeyType returnKeyType;
     
-    UIEdgeInsets contentInset;
+	UIImage* background;
+	UIImageView* backgroundImageView;
 }
 
 //real class properties
-@property int minHeight;
-@property int maxHeight;
 @property int maxNumberOfLines;
 @property int minNumberOfLines;
-@property BOOL autoComputeMinAndMax;
 @property BOOL animateHeightChange;
-@property CGFloat animationDuration;
-@property (retain) UITextView *internalTextView;
+@property (retain) UITextView *internalTextView;	
+@property (nonatomic,retain) UIImage* background;
+@property (nonatomic,retain) UIImageView* backgroundImageView;
 
 
 //uitextview properties
-@property(assign) IBOutlet NSObject<HPGrowingTextViewDelegate> *delegate;
+@property(assign) NSObject<HPGrowingTextViewDelegate> *delegate;
 @property(nonatomic,assign) NSString *text;
 @property(nonatomic,assign) UIFont *font;
 @property(nonatomic,assign) UIColor *textColor;
@@ -98,13 +87,11 @@
 @property(nonatomic,getter=isEditable) BOOL editable;
 @property(nonatomic) UIDataDetectorTypes dataDetectorTypes __OSX_AVAILABLE_STARTING(__MAC_NA, __IPHONE_3_0);
 @property (nonatomic) UIReturnKeyType returnKeyType;
-@property (assign) UIEdgeInsets contentInset;
+@property (nonatomic) BOOL enablesReturnKeyAutomatically;
+@property (nonatomic,retain) NSString* placeholder;
+
 
 //uitextview methods
-//need others? use .internalTextView
-- (BOOL)becomeFirstResponder;
-- (BOOL)resignFirstResponder;
-
 - (BOOL)hasText;
 - (void)scrollRangeToVisible:(NSRange)range;
 
