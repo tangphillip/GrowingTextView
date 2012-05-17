@@ -56,8 +56,8 @@
 	int maxHeight;
 	
 	//class properties
-	int maxNumberOfLines;
-	int minNumberOfLines;
+	NSInteger maxNumberOfLines;
+	NSInteger minNumberOfLines;
 	
 	BOOL animateHeightChange;
 	
@@ -69,10 +69,10 @@
 }
 
 //real class properties
-@property int maxNumberOfLines;
-@property int minNumberOfLines;
-@property BOOL animateHeightChange;
-@property (retain) UITextView *internalTextView;	
+@property (nonatomic,assign) NSInteger maxNumberOfLines;
+@property (nonatomic,assign) NSInteger minNumberOfLines;
+@property (nonatomic,assign) BOOL animateHeightChange;
+@property (nonatomic, retain) UITextView *internalTextView;
 @property (nonatomic,retain) UIImage* background;
 @property (nonatomic,retain) UIImageView* backgroundImageView;
 

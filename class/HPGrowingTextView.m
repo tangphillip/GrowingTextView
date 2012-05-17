@@ -31,8 +31,6 @@
 
 @implementation HPGrowingTextView
 @synthesize internalTextView;
-@synthesize maxNumberOfLines;
-@synthesize minNumberOfLines;
 @synthesize delegate;
 
 @synthesize animateHeightChange;
@@ -117,7 +115,7 @@
 	[super setFrame:aframe];
 }
 
--(void)setMaxNumberOfLines:(int)n
+-(void)setMaxNumberOfLines:(NSInteger)n
 {
 	UITextView *test = [[HPTextViewInternal alloc] init];	
 	test.font = internalTextView.font;
@@ -144,10 +142,12 @@
 	[test removeFromSuperview];
 	[test release];	
 }
+- (NSInteger) maxNumberOfLines {
+    return maxNumberOfLines;
+}
 
--(void)setMinNumberOfLines:(int)m
+-(void)setMinNumberOfLines:(NSInteger)m
 {
-	
 	UITextView *test = [[HPTextViewInternal alloc] init];	
 	test.font = internalTextView.font;
 	test.hidden = YES;
@@ -175,6 +175,11 @@
 	[test removeFromSuperview];
 	[test release];
 }
+- (NSInteger) minNumberOfLines
+{
+    return minNumberOfLines;
+}
+
 
 
 - (void)textViewDidChange:(UITextView *)textView
