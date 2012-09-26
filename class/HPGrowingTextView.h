@@ -62,7 +62,7 @@
 	BOOL animateHeightChange;
 	
 	//uitextview properties
-	NSObject <HPGrowingTextViewDelegate> *delegate;
+	__weak NSObject <HPGrowingTextViewDelegate> *delegate;
     
 	UIImage* background;
 	UIImageView* backgroundImageView;
