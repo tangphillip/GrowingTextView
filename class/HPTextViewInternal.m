@@ -126,7 +126,11 @@
 - (UILabel*)placeHolderLabel {
 	if (placeHolderLabel == nil) {
 		placeHolderLabel = [[UILabel alloc] initWithFrame:CGRectMake(8, 8, self.bounds.size.width - 16, 0)];
-		placeHolderLabel.lineBreakMode = UILineBreakModeWordWrap;
+#if defined(__IPHONE_6_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_6_0
+		placeHolderLabel.lineBreakMode = NSLineBreakByWordWrapping;
+#else
+		placeHolderLabel.lineBreakMode = UILineBreakModeWordWrap;        
+#endif
 		placeHolderLabel.numberOfLines = 0;
 		placeHolderLabel.font = self.font;
 		placeHolderLabel.backgroundColor = [UIColor clearColor];
