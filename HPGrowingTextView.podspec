@@ -9,5 +9,5 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/HansPinckaers/GrowingTextView.git", :tag => s.version.to_s }
   s.platform     = :ios
   s.source_files = 'Classes', 'class/**/*.{h,m}'
-  s.requires_arc = true
+  s.requires_arc = false
 end
